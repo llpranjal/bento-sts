@@ -10,89 +10,100 @@
       <!--
       <button type="submit" class="btn btn-outline-primary btn-sm">Filter</button>
       <button type="submit" class="btn btn-outline-primary btn-sm">Export JSON</button> -->
-    </div> 
-    {% if display == 'list'  %}
+    </div>
+    {% if display == 'list' %}
     <br><br>
-    <div id="listall" name="listall" style="margin:20px; padding:20x">
+    <div id="listall" name="listall" style="margin:20px; padding:20px">
       {% if pagination %}
-	{{ pagination.info }}
-	{{ pagination.links }}
+        {{ pagination.info }}
+        {{ pagination.links }}
       {% endif %}
       <table class="table table-striped">
          <tr>
-             <th> {{ "Value" if subtype == "terms" else "Handle" }}</th>
+             <th>{{ "Value" if subtype == "terms" else "Handle" }}</th>
+             {% if subtype == "properties" %}
+             <th>Description</th>
+             {% endif %}
          </tr>
-	 {% for dict_item in mdb[first:last] %}
-	 {% for key, value in dict_item.items() %}
-         <tr> <td> <a href="{{url_for( 'main.entities', entities=subtype, id=key) }}">{{ value }}</a> </td> </tr>
+         {% for dict_item in mdb[first:last] %}
+         {% for key, value in dict_item.items() %}
+         <tr>
+             <td><a href="{{url_for( 'main.entities', entities=subtype, id=key) }}">{{ value }}</a></td>
+             {% if subtype == "properties" %}
+             <td>{{ dict_item.get('desc', '') }}</td>
+             {% endif %}
+         </tr>
          {% endfor %}
          {% endfor %}
-       </table>
-       {% if pagination %}
-       {{ pagination.links }}
-       {% endif %}
-      </div> 
-       <br><br>
+      </table>
+      {% if pagination %}
+        {{ pagination.links }}
+      {% endif %}
+    </div>
+    <br><br>
     {% endif %}
 
-    {% if display == 'model'  %}
+    {% if display == 'model' %}
     <br><br>
-    <div id="allModel" name="allModel" style="margin:20px;padding:20x">
+    <div id="allModel" name="allModel" style="margin:20px;padding:20px">
       <table class="table table-striped">
          <tr>
-             <th> {{ "Value" if subtype == "terms" else "Handle" }} </th>
+             <th>{{ "Value" if subtype == "terms" else "Handle" }}</th>
          </tr>
          {% for item in mdb[first:last] %}
-         <tr> <td> <a href="{{url_for( 'main.entities', entities=subtype, name=item ) }}">{{ item }}</a> </td> </tr>
-         {% endfor %}
-       </table>
-       </div>
-       <br><br>
-    {% endif %}
-
-    {% if display == 'tuple'  %}
-    <br><br>
-       <div id="listall" name="listall" style="margin:20px; padding:20x">
-	 {{ pagination.info }}
-	 {{ pagination.links }}
-	 <table class="table-striped">
          <tr>
-             <th style="width:300px"> {{ "Value" if subtype == "terms" else "Handle" }}  </th> <th style="width:300px"> Model</th>
-	   </tr>
-         {% for entry in mdb[first:last] %}
-	 <tr>
-	   <td> <a href="{{url_for( 'main.entities', entities=subtype, id=entry[0] ) }}">{{ entry[1] }}</a> </td> 
-	   <td> {{ entry[2] }} </td>
-	 </tr>
-	 {% endfor %}
-       </table>
-	 {{ pagination.links }}
-      </div> 
-       <br><br>
+             <td><a href="{{url_for( 'main.entities', entities=subtype, name=item ) }}">{{ item }}</a></td>
+         </tr>
+         {% endfor %}
+      </table>
+    </div>
+    <br><br>
     {% endif %}
 
-    {% if display == 'prop-tuple'  %}
+    {% if display == 'tuple' %}
     <br><br>
-      <div id="listall" name="listall" style="margin:20px; padding:20x">
-	{{pagination.info}}
-	{{pagination.links}}
-	<table class="table-striped">
-	  <tr>
-	    <th style="width:300px"> {{ "Value" if subtype == "terms" else "Handle" }} </th> 
-	    <th style="width:300px"> Node</th> 
-	    <th style="width:300px"> Model</th>
-	  </tr>
+    <div id="listall" name="listall" style="margin:20px; padding:20px">
+      {{ pagination.info }}
+      {{ pagination.links }}
+      <table class="table-striped">
+         <tr>
+             <th>{{ "Value" if subtype == "terms" else "Handle" }}</th>
+             <th>Model</th>
+         </tr>
          {% for entry in mdb[first:last] %}
-	  <tr> 
-	    <td> <a href="{{url_for( 'main.entities', entities=subtype, id=entry[0] ) }}">{{ entry[1] }}</a> </td> 
-	    <td> <a href="{{url_for('main.entities', entities='nodes', id=entry[4] ) }}">{{ entry[3] }} </td>
-	    <td> {{ entry[2] }} </td>
-	  </tr>
-	  {% endfor %}
-	</table>
-	{{pagination.links}}
-      </div> 
-       <br><br>
+         <tr>
+             <td><a href="{{url_for( 'main.entities', entities=subtype, id=entry[0] ) }}">{{ entry[1] }}</a></td>
+             <td>{{ entry[2] }}</td>
+         </tr>
+         {% endfor %}
+      </table>
+      {{ pagination.links }}
+    </div>
+    <br><br>
+    {% endif %}
+
+    {% if display == 'prop-tuple' %}
+    <br><br>
+    <div id="listall" name="listall" style="margin:20px; padding:20px">
+      {{pagination.info}}
+      {{pagination.links}}
+      <table class="table-striped">
+         <tr>
+             <th>{{ "Value" if subtype == "terms" else "Handle" }}</th>
+             <th>Node</th>
+             <th>Model</th>
+         </tr>
+         {% for entry in mdb[first:last] %}
+         <tr>
+             <td><a href="{{url_for( 'main.entities', entities=subtype, id=entry[0] ) }}">{{ entry[1] }}</a></td>
+             <td><a href="{{url_for('main.entities', entities='nodes', id=entry[4] ) }}">{{ entry[3] }}</a></td>
+             <td>{{ entry[2] }}</td>
+         </tr>
+         {% endfor %}
+      </table>
+      {{pagination.links}}
+    </div>
+    <br><br>
     {% endif %}
 
     {% if display == 'term-tuple'  %}
